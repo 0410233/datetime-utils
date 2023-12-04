@@ -1,4 +1,10 @@
 
+/** 超简单的数字前面补零 */
+function formatNumber(n: number|string) {
+  n = n.toString()
+  return n[1] ? n : `0${n}`
+}
+
 type timestamp = number
 type DateSource = string|timestamp|Date
 
@@ -20,11 +26,6 @@ export function parseDate(value: DateSource) {
  */
 export function isValidDate(date: unknown) {
   return date instanceof Date && !isNaN(date.getTime())
-}
-
-function formatNumber(n: number|string) {
-  n = n.toString()
-  return n[1] ? n : `0${n}`
 }
 
 /**
@@ -63,7 +64,7 @@ function getOrdinalAffix(num: number) {
 
 /**
  * 将日期转换为指定格式的字符串
- * 
+ *
  * 格式化字符参考 https://momentjs.com/docs/#/displaying/format/
  */
 export function formatDatetime(
@@ -75,7 +76,7 @@ export function formatDatetime(
   if (!isValidDate(date)) {
     return ''
   }
-  
+
   let result = format
 
   // 年
@@ -109,7 +110,7 @@ export function formatDatetime(
     }
     return formatNumber(day)
   })
-  
+
   // 时
   const hours = date.getHours();
   result = result.replace(/H+/g, match => {
@@ -145,7 +146,9 @@ export function formatDatetime(
   return result
 }
 
-/** 格式化过去时间 */
+/**
+ * 格式化过去时间
+ */
 export function formatAgo(timeago: DateSource, now?: number) {
   const time = parseDate(timeago)
   if (!isValidDate(time)) {
