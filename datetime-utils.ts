@@ -18,7 +18,7 @@ export function parseDate(value: unknown) {
   if (typeof value === 'string' && /^\d+$/.test(value)) {
     value = Number(value)
   }
-  if (value === '' || (typeof value !== 'string' && typeof value !== 'number')) {
+  if (typeof value !== 'string' && typeof value !== 'number') {
     return new Date(NaN)
   }
   return new Date(value)
