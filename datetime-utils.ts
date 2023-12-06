@@ -5,18 +5,21 @@ function formatNumber(n: number|string) {
   return n[1] ? n : `0${n}`
 }
 
-type timestamp = number
-type DateSource = string|timestamp|Date
+// type timestamp = number
+// type unknown = unknown
 
 /**
  * 转换字符串或数值为日期
  */
-export function parseDate(value: DateSource) {
+export function parseDate(value: unknown) {
   if (value instanceof Date) {
     return value
   }
   if (typeof value === 'string' && /^\d+$/.test(value)) {
     value = Number(value)
+  }
+  if (value === '' || (typeof value !== 'string' && typeof value !== 'number')) {
+    return new Date(NaN)
   }
   return new Date(value)
 }
@@ -68,7 +71,7 @@ function getOrdinalAffix(num: number) {
  * 格式化字符参考 https://momentjs.com/docs/#/displaying/format/
  */
 export function formatDatetime(
-  value: DateSource,
+  value: unknown,
   format: string = "YYYY-MM-DD HH:mm",
   lang: 'zh'|'en' = 'zh'
 ) {
@@ -149,7 +152,7 @@ export function formatDatetime(
 /**
  * 格式化过去时间
  */
-export function formatAgo(timeago: DateSource, now?: number) {
+export function formatAgo(timeago: unknown, now?: number) {
   const time = parseDate(timeago)
   if (!isValidDate(time)) {
     return ''
@@ -198,28 +201,28 @@ export function formatNow(format: string, lang: 'zh'|'en') {
 /**
  * 日期时间转数组
  */
-export function dateToArray(date: DateSource): number[] {
-  date = parseDate(date)
+export function dateToArray(date: unknown): number[] {
+  const time = parseDate(date)
   return [
-    date.getFullYear(),
-    date.getMonth() + 1,
-    date.getDate(),
-    date.getHours(),
-    date.getMinutes(),
-    date.getSeconds(),
-    date.getMilliseconds(),
+    time.getFullYear(),
+    time.getMonth() + 1,
+    time.getDate(),
+    time.getHours(),
+    time.getMinutes(),
+    time.getSeconds(),
+    time.getMilliseconds(),
   ]
 }
 
 /**
  * 计算年龄
  */
-export function getAge(birthday: DateSource): number {
-  birthday = parseDate(birthday)
-  if (!isValidDate(birthday)) {
+export function getAge(birthday: unknown): number {
+  const time = parseDate(birthday)
+  if (!isValidDate(time)) {
     return 0
   }
-  const [year, month, date] = dateToArray(birthday)
+  const [year, month, date] = dateToArray(time)
   const [thisYear, thisMonth, thisDate] = dateToArray(new Date())
   if (thisYear <= year) {
     return 0
@@ -234,7 +237,7 @@ export function getAge(birthday: DateSource): number {
 /**
  * 指定日期的 n 天之后
  */
-export function dayAfter(date: DateSource, days: number) {
+export function dayAfter(date: unknown, days: number) {
   const [y, m, d, h, min, s, ms] = dateToArray(parseDate(date))
   return new Date(y, m-1, d+days, h, min, s, ms)
 }
@@ -242,7 +245,7 @@ export function dayAfter(date: DateSource, days: number) {
 /**
  * 指定日期的开始时间
  */
-export function startOfDay(date: DateSource) {
+export function startOfDay(date: unknown) {
   const [year, month, day] = dateToArray(parseDate(date))
   return new Date(year, month-1, day)
 }
@@ -250,7 +253,7 @@ export function startOfDay(date: DateSource) {
 /**
  * 指定日期的结束时间
  */
-export function endOfDay(date: DateSource) {
+export function endOfDay(date: unknown) {
   const [year, month, day] = dateToArray(parseDate(date))
   return new Date(year, month-1, day+1, 0, 0, 0, -1)
 }
@@ -258,7 +261,7 @@ export function endOfDay(date: DateSource) {
 /**
  * 指定日期的月份开始时间
  */
-export function startOfMonth(date: DateSource) {
+export function startOfMonth(date: unknown) {
   const [year, month] = dateToArray(parseDate(date))
   return new Date(year, month-1, 1)
 }
@@ -266,7 +269,7 @@ export function startOfMonth(date: DateSource) {
 /**
  * 指定日期的月份结束时间
  */
-export function endOfMonth(date: DateSource) {
+export function endOfMonth(date: unknown) {
   const [year, month] = dateToArray(parseDate(date))
   return new Date(year, month, 1, 0, 0, 0, -1)
 }
@@ -274,7 +277,7 @@ export function endOfMonth(date: DateSource) {
 /**
  * 指定日期的年份开始时间
  */
-export function startOfYear(date: DateSource) {
+export function startOfYear(date: unknown) {
   const year = parseDate(date).getFullYear()
   return new Date(year, 0, 1)
 }
@@ -282,7 +285,7 @@ export function startOfYear(date: DateSource) {
 /**
  * 指定日期的年份结束时间
  */
-export function endOfYear(date: DateSource) {
+export function endOfYear(date: unknown) {
   const year = parseDate(date).getFullYear()
   return new Date(year+1, 0, 1, 0, 0, 0, -1)
 }
