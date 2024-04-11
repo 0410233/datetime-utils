@@ -5,9 +5,6 @@ function formatNumber(n: number|string) {
   return n[1] ? n : `0${n}`
 }
 
-// type timestamp = number
-// type unknown = unknown
-
 /**
  * 转换字符串或数值为日期
  */
@@ -72,7 +69,7 @@ function getOrdinalAffix(num: number) {
  */
 export function formatDatetime(
   value: unknown,
-  format: string = "YYYY-MM-DD HH:mm",
+  format: string = "YYYY-MM-DD HH:mm:ss",
   lang: 'zh'|'en' = 'zh'
 ) {
   const date = parseDate(value)
