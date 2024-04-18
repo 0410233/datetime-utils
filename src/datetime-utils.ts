@@ -12,19 +12,16 @@ export function parseDate(value: unknown) {
   if (value instanceof Date) {
     return value
   }
-  if (typeof value === 'string' && /^\d+$/.test(value)) {
-    value = Number(value)
+  if (typeof value === 'number' || (typeof value === 'string' && /^\d+$/.test(value))) {
+    return new Date(Number(value))
   }
-  if (typeof value !== 'string' && typeof value !== 'number') {
-    return new Date(NaN)
-  }
-  return new Date(value)
+  return new Date('' + value)
 }
 
 /**
  * 判断是否有效的日期
  */
-export function isValidDate(date: unknown) {
+export function isValidDate(date: unknown): date is Date {
   return date instanceof Date && !isNaN(date.getTime())
 }
 
@@ -32,7 +29,7 @@ export function isValidDate(date: unknown) {
  * 判断是否闰年
  */
 export function isLeap(year: number) {
-  return (year%4 == 0 && year%100 != 0)||(year%400 == 0)
+  return (year%4 === 0 && year%100 !== 0) || year%400 === 0
 }
 
 const weekMap = {
@@ -191,7 +188,7 @@ export function formatAgo(timeago: unknown, now?: number) {
 /**
  * 格式化最新时间
  */
-export function formatNow(format: string, lang: 'zh'|'en') {
+export function formatNow(format: string, lang: 'zh'|'en' = 'zh') {
   return formatDatetime(new Date(), format, lang)
 }
 
