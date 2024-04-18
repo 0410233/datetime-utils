@@ -2,7 +2,7 @@
   "name": "datetime-utils",
   "version": "1.0.0",
   "description": "",
-  "main": "src/datetime-utils.ts",
+  "main": "src/index.ts",
   "scripts": {
     "build": "tsc"
   },
